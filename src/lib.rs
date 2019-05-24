@@ -24,6 +24,7 @@
 //! See [the `Colorize` trait](./trait.Colorize.html) for all the methods.
 //!
 
+extern crate atty;
 #[macro_use]
 extern crate lazy_static;
 #[cfg(windows)]
@@ -173,7 +174,8 @@ impl ColoredString {
         // TODO: BoyScoutRule
         let reset = "\x1B[0m";
         let style = self.compute_style();
-        let matches: Vec<usize> = self.input
+        let matches: Vec<usize> = self
+            .input
             .match_indices(reset)
             .map(|(idx, _)| idx)
             .collect();

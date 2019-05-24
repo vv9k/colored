@@ -14,6 +14,7 @@ keywords = ["color", "string", "term", "ansi_term", "term-painter"]
 no-color = []
 
 [dependencies]
+atty = "0.2.11"
 lazy_static = "1.2.0"
 
 [target.'cfg(windows)'.dependencies]
