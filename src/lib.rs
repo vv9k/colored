@@ -27,7 +27,7 @@
 #[macro_use]
 extern crate lazy_static;
 #[cfg(windows)]
-extern crate winconsole;
+extern crate winapi;
 
 #[cfg(test)]
 extern crate rspec;

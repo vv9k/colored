@@ -16,8 +16,14 @@ no-color = []
 [dependencies]
 lazy_static = "1.2.0"
 
-[target.'cfg(windows)'.dependencies]
-winconsole = "0.10.0"
+[target.'cfg(windows)'.dependencies.winapi]
+version = "0.3"
+default-features = false
+features = [
+    "consoleapi",
+    "processenv",
+    "winbase"
+]
 
 [dev_dependencies]
 ansi_term = "^0.9"

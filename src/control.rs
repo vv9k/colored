@@ -3,11 +3,14 @@
 use std::default::Default;
 use std::env;
 use std::sync::atomic::{AtomicBool, Ordering};
-#[cfg(windows)]
-use winconsole::{console, errors::WinResult};
 
 /// Sets a flag to the console to use a virtual terminal environment.
-/// This is primarily used for Windows 10 environments which will not correctly colorize the outputs based on ansi escape codes.
+///
+/// This is primarily used for Windows 10 environments which will not correctly colorize
+/// the outputs based on ANSI escape codes.
+///
+/// The returned `Result` is _always_ `Ok(())`, the return type was kept to ensure backwards
+/// compatibility.
 ///
 /// # Notes
 /// > Only available to `Windows` build targets.
@@ -15,18 +18,41 @@ use winconsole::{console, errors::WinResult};
 /// # Example
 /// ```rust
 /// use colored::*;
-/// control::set_virtual_terminal(false);
+/// control::set_virtual_terminal(false).unwrap();
 /// println!("{}", "bright cyan".bright_cyan());	// will print '[96mbright cyan[0m' on windows 10
 ///
-/// control::set_virtual_terminal(true);
+/// control::set_virtual_terminal(true).unwrap();
 /// println!("{}", "bright cyan".bright_cyan());	// will print correctly
 /// ```
 #[cfg(windows)]
-pub fn set_virtual_terminal(use_virtual: bool) -> WinResult<()> {
-	let mut mode = console::get_output_mode()?;
-	mode.VirtualTerminalProcessing = use_virtual;
-	console::set_output_mode(mode)?;
-	Ok(())
+pub fn set_virtual_terminal(use_virtual: bool) -> Result<(), ()> {
+    use winapi::{
+        shared::minwindef::DWORD,
+        um::{
+            consoleapi::{GetConsoleMode, SetConsoleMode},
+            processenv::GetStdHandle,
+            winbase::STD_OUTPUT_HANDLE,
+            wincon::ENABLE_VIRTUAL_TERMINAL_PROCESSING,
+        }
+    };
+
+    unsafe {
+        let handle = GetStdHandle(STD_OUTPUT_HANDLE);
+        let mut original_mode: DWORD = 0;
+        GetConsoleMode(handle, &mut original_mode);
+
+        let enabled = original_mode & ENABLE_VIRTUAL_TERMINAL_PROCESSING == ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+
+        match (use_virtual, enabled) {
+            // not enabled, should be enabled
+            (true, false) => SetConsoleMode(handle, ENABLE_VIRTUAL_TERMINAL_PROCESSING | original_mode),
+            // already enabled, should be disabled
+            (false, true) => SetConsoleMode(handle, ENABLE_VIRTUAL_TERMINAL_PROCESSING ^ original_mode),
+            _ => 0,
+        };
+    }
+
+    Ok(())
 }
 
 pub struct ShouldColorize {
