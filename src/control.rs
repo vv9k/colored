@@ -5,7 +5,12 @@ use std::env;
 use std::sync::atomic::{AtomicBool, Ordering};
 
 /// Sets a flag to the console to use a virtual terminal environment.
-/// This is primarily used for Windows 10 environments which will not correctly colorize the outputs based on ansi escape codes.
+///
+/// This is primarily used for Windows 10 environments which will not correctly colorize
+/// the outputs based on ANSI escape codes.
+///
+/// The returned `Result` is _always_ `Ok(())`, the return type was kept to ensure backwards
+/// compatibility.
 ///
 /// # Notes
 /// > Only available to `Windows` build targets.
@@ -13,14 +18,14 @@ use std::sync::atomic::{AtomicBool, Ordering};
 /// # Example
 /// ```rust
 /// use colored::*;
-/// control::set_virtual_terminal(false);
+/// control::set_virtual_terminal(false).unwrap();
 /// println!("{}", "bright cyan".bright_cyan());	// will print '[96mbright cyan[0m' on windows 10
 ///
-/// control::set_virtual_terminal(true);
+/// control::set_virtual_terminal(true).unwrap();
 /// println!("{}", "bright cyan".bright_cyan());	// will print correctly
 /// ```
 #[cfg(windows)]
-pub fn set_virtual_terminal(use_virtual: bool) {
+pub fn set_virtual_terminal(use_virtual: bool) -> Result<(), ()> {
     use winapi::{
         shared::minwindef::DWORD,
         um::{
@@ -46,6 +51,8 @@ pub fn set_virtual_terminal(use_virtual: bool) {
             _ => 0,
         };
     }
+
+    Ok(())
 }
 
 pub struct ShouldColorize {
