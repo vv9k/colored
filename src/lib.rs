@@ -27,7 +27,7 @@
 #[macro_use]
 extern crate lazy_static;
 #[cfg(windows)]
-extern crate winconsole;
+extern crate winapi;
 
 #[cfg(test)]
 extern crate rspec;
@@ -173,16 +173,16 @@ impl ColoredString {
         // TODO: BoyScoutRule
         let reset = "\x1B[0m";
         let style = self.compute_style();
-        let matches: Vec<usize> = self.input
+        let matches: Vec<usize> = self
+            .input
             .match_indices(reset)
             .map(|(idx, _)| idx)
             .collect();
 
-        let mut idx_in_matches = 0;
         let mut input = self.input.clone();
         input.reserve(matches.len() * style.len());
 
-        for offset in matches {
+        for (idx_in_matches, offset) in matches.into_iter().enumerate() {
             // shift the offset to the end of the reset sequence and take in account
             // the number of matches we have escaped (which shift the index to insert)
             let mut offset = offset + reset.len() + idx_in_matches * style.len();
@@ -191,8 +191,6 @@ impl ColoredString {
                 input.insert(offset, cchar);
                 offset += 1;
             }
-
-            idx_in_matches += 1;
         }
 
         input

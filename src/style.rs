@@ -72,7 +72,7 @@ impl Styles {
         }
 
         let res: Vec<Styles> = STYLES
-            .into_iter()
+            .iter()
             .filter(|&&(ref mask, _)| (0 != (u & mask)))
             .map(|&(_, value)| value)
             .collect();
@@ -86,7 +86,7 @@ impl Styles {
 
 impl Style {
     pub fn to_str(self) -> String {
-        let styles = Styles::from_u8(self.0).unwrap_or(Vec::new());
+        let styles = Styles::from_u8(self.0).unwrap_or_default();
         styles
             .iter()
             .map(|s| s.to_str())
@@ -114,7 +114,6 @@ mod tests {
         fn empty_is_none() {
             assert_eq!(None, Styles::from_u8(CLEARV))
         }
-
     }
 
     mod u8_to_styles_isomorphism {
@@ -270,6 +269,5 @@ mod tests {
             ];
             test_combine!(s)
         }
-
     }
 }
