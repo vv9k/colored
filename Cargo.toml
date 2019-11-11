@@ -14,7 +14,8 @@ keywords = ["color", "string", "term", "ansi_term", "term-painter"]
 no-color = []
 
 [dependencies]
-lazy_static = "1.2.0"
+lazy_static = "1.4.0"
+
 
 [target.'cfg(windows)'.dependencies.winapi]
 version = "0.3"
@@ -26,5 +27,5 @@ features = [
 ]
 
 [dev_dependencies]
-ansi_term = "^0.9"
+ansi_term = "0.12"
 rspec = "=1.0.0-beta.3"
