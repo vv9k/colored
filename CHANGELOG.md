@@ -1,8 +1,11 @@
 
-# New Version
+# 1.9.0 (November 11, 2019)
 
-- **[BREAKING CHANGE]:** Replace `winconsole` with `winapi`:
+- **[POSSIBLE_BREAKING CHANGE]:** Replace `winconsole` with `winapi`:
   - Changes `set_virtual_terminal` function signature.
+- Update dependencies
+- Add Dockerfile
+- Respect tty discovery for CLICOLOR
 
 # 1.8.0 (April 30, 2019)
 
