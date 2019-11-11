@@ -1,4 +1,9 @@
 
+# New Version
+
+- **[BREAKING CHANGE]:** Replace `winconsole` with `winapi`:
+  - Changes `set_virtual_terminal` function signature.
+
 # 1.8.0 (April 30, 2019)
 
 - FEAT: support Windows 10 colors
