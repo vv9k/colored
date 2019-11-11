@@ -24,6 +24,7 @@
 //! See [the `Colorize` trait](./trait.Colorize.html) for all the methods.
 //!
 
+extern crate atty;
 #[macro_use]
 extern crate lazy_static;
 #[cfg(windows)]
