@@ -101,6 +101,10 @@ impl Style {
     pub fn from_both(one: Style, two: Styles) -> Style {
         Style(one.0 | two.to_u8())
     }
+
+    pub fn add(&mut self, two: Styles) {
+        self.0 |= two.to_u8();
+    }
 }
 
 #[cfg(test)]
