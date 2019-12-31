@@ -1,4 +1,10 @@
 
+# 1.9.1 (December 31, 2019)
+
+- Remove deprecated `try!` macro in codebase
+- Reduce allocations in `ColoredString` impl (PR#65)
+- Added `"purple"` as match in `impl FromStr for Color` (PR#71)
+
 # 1.9.0 (November 11, 2019)
 
 - **[POSSIBLE_BREAKING CHANGE]:** Replace `winconsole` with `winapi`:
