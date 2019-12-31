@@ -418,9 +418,9 @@ impl fmt::Display for ColoredString {
         // XXX: see tests. Useful when nesting colored strings
         let escaped_input = self.escape_inner_reset_sequences();
 
-        try!(f.write_str(&self.compute_style()));
-        try!(<String as fmt::Display>::fmt(&escaped_input, f));
-        try!(f.write_str("\x1B[0m"));
+        f.write_str(&self.compute_style())?;
+        <String as fmt::Display>::fmt(&escaped_input, f)?;
+        f.write_str("\x1B[0m")?;
         Ok(())
     }
 }
