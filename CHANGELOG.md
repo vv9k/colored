@@ -1,4 +1,8 @@
 
+# 1.9.2 (January 11, 2020)
+- Exposed `ColoredString` data through methods for purposes of interrogating the applied colours.
+- Increased documentation.
+
 # 1.9.1 (December 31, 2019)
 
 - Remove deprecated `try!` macro in codebase
