@@ -21,10 +21,12 @@ static STYLES: [(u8, Styles); 8] = [
 
 pub static CLEAR: Style = Style(CLEARV);
 
+/// A combinatorial style such as bold, italics, dimmed, etc.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct Style(u8);
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[allow(missing_docs)]
 pub enum Styles {
     Clear,
     Bold,
@@ -85,7 +87,21 @@ impl Styles {
 }
 
 impl Style {
-    pub fn to_str(self) -> String {
+    /// Check if the current style has one of [`Styles`](Styles) switched on.
+    ///
+    /// ```rust
+    /// # use colored::*;
+    /// let colored = "".bold().italic();
+    /// assert_eq!(colored.style().contains(Styles::Bold), true);
+    /// assert_eq!(colored.style().contains(Styles::Italic), true);
+    /// assert_eq!(colored.style().contains(Styles::Dimmed), false);
+    /// ```
+    pub fn contains(&self, style: Styles) -> bool {
+        let s = style.to_u8();
+        self.0 & s == s
+    }
+
+    pub(crate) fn to_str(self) -> String {
         let styles = Styles::from_u8(self.0).unwrap_or_default();
         styles
             .iter()
@@ -94,21 +110,14 @@ impl Style {
             .join(";")
     }
 
-    pub fn new(from: Styles) -> Style {
-        Style(from.to_u8())
-    }
-
-    pub fn from_both(one: Style, two: Styles) -> Style {
-        Style(one.0 | two.to_u8())
-    }
-
-    pub fn add(&mut self, two: Styles) {
+    pub(crate) fn add(&mut self, two: Styles) {
         self.0 |= two.to_u8();
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use super::*;
 
     mod u8_to_styles_invalid_is_none {
         use super::super::CLEARV;
@@ -170,9 +179,9 @@ mod tests {
         };
 
         fn style_from_multiples(styles: &[Styles]) -> Style {
-            let mut res = Style::new(styles[0]);
+            let mut res = Style(styles[0].to_u8());
             for s in &styles[1..] {
-                res = Style::from_both(res, *s)
+                res = Style(res.0 | s.to_u8());
             }
             res
         }
@@ -273,5 +282,14 @@ mod tests {
             ];
             test_combine!(s)
         }
+    }
+
+    fn test_style_contains() {
+        let mut style = Style(Styles::Bold.to_u8());
+        style.add(Styles::Italic);
+
+        assert_eq!(style.contains(Styles::Bold), true);
+        assert_eq!(style.contains(Styles::Italic), true);
+        assert_eq!(style.contains(Styles::Dimmed), false);
     }
 }
