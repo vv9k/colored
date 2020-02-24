@@ -1,4 +1,7 @@
 
+# 1.9.3 (February 24, 2020)
+- Fix compilation regression for 1.34.0. Thanks @jlevon for reporting.
+
 # 1.9.2 (January 11, 2020)
 - Exposed `ColoredString` data through methods for purposes of interrogating the applied colours.
 - Increased documentation.
