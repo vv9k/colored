@@ -12,10 +12,12 @@ keywords = ["color", "string", "term", "ansi_term", "term-painter"]
 [features]
 # with this feature, no color will ever be written
 no-color = []
+serde = ["serde_crate/derive"]
 
 [dependencies]
 atty = "0.2"
 lazy_static = "1"
+serde_crate = { package = "serde", version = "1", optional = true }
 
 [target.'cfg(windows)'.dependencies.winapi]
 version = "0.3"

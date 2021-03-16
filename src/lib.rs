@@ -31,6 +31,9 @@ extern crate lazy_static;
 #[cfg(windows)]
 extern crate winapi;
 
+#[cfg(feature = "serde")]
+extern crate serde_crate;
+
 #[cfg(test)]
 extern crate rspec;
 

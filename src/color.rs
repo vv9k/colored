@@ -1,7 +1,15 @@
 use std::{borrow::Cow, str::FromStr};
 
+#[cfg(feature = "serde")]
+use serde_crate::*;
+
 /// The 8 standard colors.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[cfg_attr(
+    feature = "serde",
+    derive(Serialize, Deserialize),
+    serde(crate = "serde_crate")
+)]
 #[allow(missing_docs)]
 pub enum Color {
     Black,
