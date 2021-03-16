@@ -11,8 +11,8 @@ before_script:
   - rustup component add clippy
 
 script:
-  - cargo test --verbose
-  - cargo clippy -- -Dwarnings
+  - cargo test --all-features --verbose
+  - cargo clippy --all-features -- -Dwarnings
 
 matrix:
   allow_failures:
