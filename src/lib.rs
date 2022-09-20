@@ -41,6 +41,11 @@ mod color;
 pub mod control;
 mod style;
 
+pub use self::customcolors::CustomColor;
+
+/// Custom colors support.
+pub mod customcolors;
+
 pub use color::*;
 
 use std::{borrow::Cow, fmt, ops::Deref};
@@ -177,6 +182,16 @@ pub trait Colorize {
     {
         self.color(Color::TrueColor { r, g, b })
     }
+    fn custom_color(self, color: CustomColor) -> ColoredString
+    where
+        Self: Sized,
+    {
+        self.color(Color::TrueColor {
+            r: color.r,
+            g: color.g,
+            b: color.b,
+        })
+    }
     fn color<S: Into<Color>>(self, color: S) -> ColoredString;
     // Background Colors
     fn on_black(self) -> ColoredString
@@ -292,6 +307,16 @@ pub trait Colorize {
         Self: Sized,
     {
         self.on_color(Color::TrueColor { r, g, b })
+    }
+    fn on_custom_color(self, color: CustomColor) -> ColoredString
+    where
+        Self: Sized,
+    {
+        self.on_color(Color::TrueColor {
+            r: color.r,
+            g: color.g,
+            b: color.b,
+        })
     }
     fn on_color<S: Into<Color>>(self, color: S) -> ColoredString;
     // Styles
